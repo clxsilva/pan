@@ -1,0 +1,27 @@
+@charset 
+
+h1{
+    font-family: Arial, Helvetica, sans-serif;
+    background: re;
+}
+
+p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1em;
+    padding-top: 250px;
+    text-align: center;
+}
+
+.seta1{
+    width: 20%;
+    position: relative;
+    top: -140px;
+    margin: 145px;
+}
+
+.btn{
+    width: 25%;
+    position: relative;
+    top: -390px;
+    margin: 150px 135px;
+}

@@ -9,6 +9,8 @@ const botao = document.getElementById('button')
 
 // pré carregamento do arquivo de áudio
 let som = new Audio("sound/alarm.mp3")
+let stream, track // variáveis de apoio
+inicializarLanterna()
 
 // passo 2: manipular o evento mouse pressionado
 // addEventListener ("escuta de eventos em tempo real")
@@ -36,6 +38,8 @@ botao.addEventListener('touchstart', (event) => {
     event.preventDefault() // ignorar o comportamento padrão
     // console.log("tela pressionada")
     som.play()
+    ligar()
+    inicializarLanterna()
 })
 
 // deixar de pressionar a tela touch
@@ -43,4 +47,52 @@ botao.addEventListener('touchend', (event) => {
     event.preventDefault() // ignorar o comportamento padrão
     // console.log("deixar de pressionar")
     som.pause()
+    desligar()
+    inicializarLanterna
 })
+
+// lanterna (torch)
+async function inicializarLanterna() {
+    // try-catch (tratamento de exceções)
+    try {
+        // Solicita acesso à câmera traseira sem exibir o vídeo
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" }
+        })
+        
+        // Obtém o track do vídeo para controlar a lanterna
+        track = stream.getVideoTracks()[0]
+        
+        // Verifica se o dispositivo suporta o uso da lanterna
+        const capabilities = track.getCapabilities()
+        if (!capabilities.torch) {
+            console.log("Lanterna não suportada no dispositivo.")
+            return;
+        }
+        console.log("lanterna pronta")
+    } catch (error) {
+        console.error(`Erro ao inicializar a lanterna: ${error}`)
+    }
+}
+
+// Função para ligar a lanterna (torch)
+async function ligar() {
+    if (track) {
+        try {
+            await track.applyConstraints({ advanced: [{ torch: true }] })
+        } catch (error) {
+            console.error(`Erro ao inicializar a lanterna: ${error}`)
+        }
+    }
+}
+
+// Função para desligar a lanterna sem parar o stream
+async function desligar() {
+    if (track) {
+        try {
+            await track.applyConstraints({ advanced: [{ torch: false }] })
+        } catch (error) {
+            console.error(`Erro ao inicializar a lanterna: ${error}`)
+        }
+    }
+}
